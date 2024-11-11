@@ -22,3 +22,15 @@ The dataset used in this dashboard contains the following columns:
 
 ### Dataset File
 - Excel File: 
+([CustomersDataCSV.csv](https://github.com/user-attachments/files/17703675/CustomersDataCSV.csv))
+
+### Key Objectives:
+- Clean and preprocess sales data for analysis
+- Analyze sales trends and patterns using SQL Server queries
+- Visualize critical sales performance metrics using Power BI dashboards
+- Identify top products, regions with highest sales, and top customers
+
+### Methodology:
+- Data Cleaning: Excel data manipulation and Pivot Tables
+- Data Analysis: SQL Server queries for data modeling and insights
+- Data Visualization: Power BI dashboards for interactive and dynamic visualization
