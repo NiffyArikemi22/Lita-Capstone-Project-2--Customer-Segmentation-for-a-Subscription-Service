@@ -1,11 +1,10 @@
 ## Lita-Capstone-Project-2--Customer-Segmentation-for-a-Subscription-Service
 
 ### Project Overview
-This repository demonstrates a Power BI solution that integrates data from both an Excel Pivot Table and an SQL Database to visualize and analyze customer subscription trends, segmentation, and cancellations. The dashboard uses slicers for interactive analysis, and the data sources are cleaned and transformed for deeper insights. This project involves analyzing customer data for a subscription service to identify segments and trends. The goal is to understand customer behavior, track subscription types, and identify key trends in cancellations and renewals. The final deliverable is a Power BI dashboard that presents the analysis.
+This repository demonstrates a Power BI solution that integrates data from both an Excel Pivot Table and an SQL Database to visualize and analyze customer subscription trends, segmentation, and cancellations. The PowerBI dashboard uses slicers for interactive analysis, and the data sources are cleaned and transformed for deeper insights. This project involves analyzing customer data for a subscription service to identify segments and trends. The goal is to understand customer behavior, track subscription types, and identify key trends in cancellations and renewals. The final deliverable is a Power BI dashboard that presents the analysis.
 
 ### Dataset Structure
 The dataset used in this dashboard contains the following columns:
-
 - CustomerID: Unique identifier for the customer.
 - CustomerName: The name of the customer.
 - Region: The geographic region the customer belongs to.
@@ -29,7 +28,7 @@ The dataset used in this dashboard contains the following columns:
 - Clean and preprocess sales data for analysis
 - Analyze sales trends and patterns using SQL Server queries
 - Visualize critical sales performance metrics using Power BI dashboards
-- Identify top products, regions with highest sales, and top customers
+- Identify top Subscription pattern, regions with highest subscription, and top customers
 
 ### Methodology:
 - Data Cleaning: Excel data manipulation and Pivot Tables
@@ -37,7 +36,7 @@ The dataset used in this dashboard contains the following columns:
 - Data Visualization: Power BI dashboards for interactive and dynamic visualization
 
 ### Exploratory Data Analysis (EDA)
- - Total revenue by subscription type
+ - Total Revenue by subscription type
  - Total number of active and canceled subscriptions
  - Total number of customers from each region
  - Average subscription duration for all customers
@@ -72,50 +71,68 @@ I loaded the dataset into my SQL Server environment to write and validate the qu
 - Find the top 3 regions by subscription cancellations.
 - Find the total number of active and canceled subscriptions.
 
-``` Select * from [dbo].[CustomersDataCSV]
 
-------- (Question 1) Retrieve the total number of customers from each region-----------
-Select Region, Count(CustomerID)
+```Select * from [dbo].[CustomersDataCSV]```
+
+
+(Question 1) Retrieve the total number of customers from each Region
+
+```Select Region, Count(CustomerID)
 as Total_No_of_Customers
 From CustomersDataCSV 
 group by Region
+```
 
-------- (Question 2) find the most popular subscription type by the number of customers-------------
-Select SubscriptionType,
+
+(Question 2) find the most popular subscription type by the number of customers
+
+```Select SubscriptionType,
 Count(CustomerID) as Number_of_Customers
 from CustomersDataCSV group by SubscriptionType
+```
 
--------(Question 3) find customers who canceled their subscription within 6 months-----
-Select CustomerName,Canceled,SubscriptionStart 
+(Question 3) find customers who canceled their subscription within 6 months
+
+```Select CustomerName,Canceled,SubscriptionStart 
 from CustomersDataCSV 
 where Canceled =0
 and Month(SubscriptionStart)
 between 1 and 6
+```
 
--------(Question 4) calculate the average subscription duration for all customers----------
-Select Count(CustomerID)
+(Question 4) calculate the average subscription duration for all customers
+
+```Select Count(CustomerID)
 AS All_customers, AVG(DateDiff(Day,SubscriptionStart, SubscriptionEnd)) 
 as Average_Subscription_Duration 
 from CustomersDataCSV
 where SubscriptionEnd is not Null
+```
 
----------(Question 5) Find customers with subscriptions longer than 12 months.
+(Question 5) Find customers with subscriptions longer than 12 months.
 
-Select CustomerName, SubscriptionType, SubscriptionStart, SubscriptionEnd
+```Select CustomerName, SubscriptionType, SubscriptionStart, SubscriptionEnd
 from CustomersDataCSV
 where DateDiff(Month, SubscriptionStart, SubscriptionEnd)>=12
+```
 
----------(Question 6) Calculate total revenue by subscription type
-Select SubscriptionType, sum(Revenue)
+(Question 6) Calculate total revenue by subscription type
+
+```Select SubscriptionType, sum(Revenue)
 as Total_Revenue
 from CustomersDataCSV
 group by SubscriptionType
+```
 
----------(Question 7) Find the top 3 regions by subscription cancellations
-Select Top 3 Region, Canceled from CustomersDataCSV
+(Question 7) Find the top 3 regions by subscription cancellations
 
-----------(Question 8) Find the total number of active and canceled subscriptions
-Select Canceled,
+
+```Select Top 3 Region, Canceled from CustomersDataCSV```
+
+
+(Question 8) Find the total number of active and canceled subscriptions
+
+```Select Canceled,
 sum(case when Canceled = 1 then 1 else 0 end) 
 as Activesubscriptions,
 sum(case when canceled = 0 then 1 else 0 end)
@@ -126,75 +143,88 @@ group by Canceled
 
 ### Power BI:
 To create a Power BI dashboard that visualizes key customer segments, cancellations, and subscription trends, I followed the following steps to design an interactive and insightful report.
+
 ####Step 1: *Load the Data*
 1. *Import Data*: Import the dataset into Power BI by selecting "Get Data" and choosing the file format (CSV) 
 2. *Verify Data Quality*: Ensured the data types are correctly assigned ( CustomerID as text, SubscriptionStart and SubscriptionEnd as dates, Revenue as a numeric field, Canceled as Boolean)
-### Step 2: *Create Calculated Columns/Measures*
+
+Step 2: *Create Calculated Columns/Measures*
 Before building the visuals, I created some useful calculated columns or measures to enhance your analysis:
+
 - *Subscription Duration* (calculated column):
-  DAX
+
+    ```DAX
   SubscriptionDuration = DATEDIFF([SubscriptionStart], [SubscriptionEnd], DAY)
-  
+  ```
 
 - *Active Subscription* (calculated column to flag active subscriptions):
-  DAX
+
+
+   ```DAX
   ActiveSubscription = IF([Canceled] = TRUE(), "Canceled", "Active")
   
 
 - *Total Revenue* (measure for total revenue):
-  DAX
+
+  ```DAX
   TotalRevenue = SUM([Revenue])
   
 
 - *Revenue per Customer* (measure to calculate average revenue per customer):
-  DAX
+
+   ```DAX
   RevenuePerCustomer = AVERAGE([Revenue])
   
 
 - *Canceled Customers* (measure to count canceled customers):
-  DAX
+
+   ```DAX
   CanceledCustomers = COUNTROWS(FILTER(YourTable, [Canceled] = TRUE()))
   
+
 - *Active Customers* (measure to count active customers):
-  DAX
+
+   ```DAX
   ActiveCustomers = COUNTROWS(FILTER(YourTable, [Canceled] = FALSE()))
   
 
 - *Customer Growth* (measure for new customers by subscription start year):
-  DAX
+
+   ```DAX
   CustomerGrowth = DISTINCTCOUNT([CustomerID])
   
+
 ### Step 3: *Create Visuals for the Dashboard*
 
-#### 1. *Customer Segments Visualization* (Customer Demographics and Subscription Type)
-- *Bar Chart* or *Stacked Column Chart*: 
+#### 1. *Customer Segments Visualization* (Customer Subscription Type)
+- *Bar Chart*: 
   - *Axis*: Region or SubscriptionType
-  - *Values*: Count of CustomerID (this gives you the number of customers per region or subscription type)
+  - *Values*: Count of CustomerID (this gives you the number of customers per subscription type)
   - *Legend*: Use ActiveSubscription to show how many customers are active vs. canceled.
 
 #### 2. *Subscription Status Breakdown*
-- *Pie Chart* or *Donut Chart*:
+- *Donut Chart*:
   - *Values*: Count of CustomerID
   - *Legend*: Use ActiveSubscription (e.g., Active vs Canceled)
 
 #### 3. *Revenue Over Time*
 - *Line Chart*: 
-  - *Axis*: SubscriptionStart or use a Date Hierarchy (Year, Quarter, Month)
+  - *Axis*: SubscriptionStart (Year, Quarter, Month)
   - *Values*: TotalRevenue
   - This will show the trend of revenue over time.
 
 #### 4. *Customer Growth by Period*
-- *Line Chart* or *Area Chart*:
-  - *Axis*: Year (or Month, if granular data is available)
+- *Area Chart*:
+  - *Axis*: Year (or Month)
   - *Values*: CustomerGrowth
   - This will show the growth or decline in the number of customers over time.
 
-#### 5. *Revenue by Region/Subscription Type*
+#### 5. *Revenue by Region*
 - *Stacked Column Chart*:
   - *Axis*: Region or SubscriptionType
   - *Values*: TotalRevenue
   - *Legend*: ActiveSubscription
-  - This can help to see which regions or subscription types are generating more revenue and how that correlates with cancellations.
+  - This can help to see which regions are generating more revenue and how that correlates with cancellations.
 
 #### 6. *Cancellation Analysis*
 - *Bar Chart*:
@@ -209,12 +239,12 @@ Before building the visuals, I created some useful calculated columns or measure
   - This will give insight into which subscription types generate the most revenue per customer.
 
 #### 8. *Top 10 Customers by Revenue*
-- *Table or Matrix Visualization*:
+- *Table*:
   - *Columns*: CustomerID, CustomerName, TotalRevenue
   - This shows the top 10 customers contributing the most revenue. Use sorting to display top revenue-generating customers.
 
 ### Step 4: *Interactive Slicers*
-Add slicers to make the dashboard interactive and allow users to filter the data:
+I added slicers to make the dashboard interactive and allow to filter the data:
 
 1. *Slicer for Region*: Add a slicer to filter by region.
    - *Field*: Region
@@ -231,15 +261,29 @@ Add slicers to make the dashboard interactive and allow users to filter the data
 5. *Slicer for Customer Growth Period*: Add a slicer for period selection (e.g., year, month, quarter).
    - *Field*: SubscriptionStart or use a Date Hierarchy.
 
+![CustomersData](https://github.com/user-attachments/assets/5d15ed65-d11c-4394-a015-42c157ee7ae1)
 
-
+![CustomersData png 2](https://github.com/user-attachments/assets/00f19a88-b980-4dec-83c0-b2e5cdfe364a)
 
 
 ### Key Insights the Dashboard Could Reveal:
-1. *Customer Segmentation*: Identifies which regions or subscription types have the highest customer count and revenue.
+1. *Customer Segmentation*: Identifies which subscription types have the highest customer count and revenue.
 2. *Trends in Cancellations*: Tracks the impact of cancellations over time, helping businesses focus on retention efforts.
 3. *Revenue Trends*: Shows how revenue has evolved, revealing seasonality or long-term trends.
 4. *Growth and Acquisition*: Visualizes customer growth over time, helping businesses understand their acquisition rate.
 5. *Top Customers*: Pinpoints top customers by revenue, which can help in targeted sales or retention strategies.
 
 This dashboard design provides a comprehensive view of the customer and subscription landscape, while the interactivity of slicers gives users the flexibility to analyze different segments or time periods.
+
+
+### Conclusion
+
+This project provides a detailed analysis of customer subscription trends, focusing on revenue generation, cancellation rates, and customer churn. By leveraging SQL, Pivot Tables, and Power BI, we were able to uncover the following key insights:
+
+- *Revenue Insights*: Certain regions and subscription types generate significantly higher revenue. Basic subscriptions, for example, have the highest revenue
+- *Churn Analysis*: We observed that churn rates vary by region, with some areas showing much higher cancellation rates, which could indicate potential issues with customer retention strategies in those regions.
+- *Subscription Trends*: Over time, new subscriptions have shown seasonal patterns, with certain months experiencing spikes. This could be useful for planning marketing campaigns or promotions.
+- *Customer Segmentation*: A more granular segmentation of customers revealed key high-value customers and regions that could be prioritized for special offers or loyalty programs.
+
+These insights can help organizations make data-driven decisions to optimize their subscription offerings, reduce churn, and increase overall customer lifetime value (CLV).
+
