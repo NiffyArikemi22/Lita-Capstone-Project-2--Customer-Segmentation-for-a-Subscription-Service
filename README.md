@@ -1,4 +1,4 @@
-## Lita-Capstone-Project-2--Customer-Segmentation-for-a-Subscription-Service
+### Lita-Capstone-Project-2--Customer-Segmentation-for-a-Subscription-Service
 
 ### Project Overview
 This repository demonstrates a Power BI solution that integrates data from both an Excel Pivot Table and an SQL Database to visualize and analyze customer subscription trends, segmentation, and cancellations. The PowerBI dashboard uses slicers for interactive analysis, and the data sources are cleaned and transformed for deeper insights. This project involves analyzing customer data for a subscription service to identify segments and trends. The goal is to understand customer behavior, track subscription types, and identify key trends in cancellations and renewals. The final deliverable is a Power BI dashboard that presents the analysis.
@@ -75,7 +75,7 @@ I loaded the dataset into my SQL Server environment to write and validate the qu
 ```Select * from [dbo].[CustomersDataCSV]```
 
 
-(Question 1) Retrieve the total number of customers from each Region
+1. Retrieve the total number of customers from each Region
 
 ```Select Region, Count(CustomerID)
 as Total_No_of_Customers
@@ -84,14 +84,14 @@ group by Region
 ```
 
 
-(Question 2) find the most popular subscription type by the number of customers
+2. find the most popular subscription type by the number of customers
 
 ```Select SubscriptionType,
 Count(CustomerID) as Number_of_Customers
 from CustomersDataCSV group by SubscriptionType
 ```
 
-(Question 3) find customers who canceled their subscription within 6 months
+3. find customers who canceled their subscription within 6 months
 
 ```Select CustomerName,Canceled,SubscriptionStart 
 from CustomersDataCSV 
@@ -100,7 +100,7 @@ and Month(SubscriptionStart)
 between 1 and 6
 ```
 
-(Question 4) calculate the average subscription duration for all customers
+4. calculate the average subscription duration for all customers
 
 ```Select Count(CustomerID)
 AS All_customers, AVG(DateDiff(Day,SubscriptionStart, SubscriptionEnd)) 
@@ -109,14 +109,14 @@ from CustomersDataCSV
 where SubscriptionEnd is not Null
 ```
 
-(Question 5) Find customers with subscriptions longer than 12 months.
+5. Find customers with subscriptions longer than 12 months.
 
 ```Select CustomerName, SubscriptionType, SubscriptionStart, SubscriptionEnd
 from CustomersDataCSV
 where DateDiff(Month, SubscriptionStart, SubscriptionEnd)>=12
 ```
 
-(Question 6) Calculate total revenue by subscription type
+6. Calculate total revenue by subscription type
 
 ```Select SubscriptionType, sum(Revenue)
 as Total_Revenue
@@ -124,13 +124,13 @@ from CustomersDataCSV
 group by SubscriptionType
 ```
 
-(Question 7) Find the top 3 regions by subscription cancellations
+7. Find the top 3 regions by subscription cancellations
 
 
 ```Select Top 3 Region, Canceled from CustomersDataCSV```
 
 
-(Question 8) Find the total number of active and canceled subscriptions
+8. Find the total number of active and canceled subscriptions
 
 ```Select Canceled,
 sum(case when Canceled = 1 then 1 else 0 end) 
@@ -266,14 +266,14 @@ I added slicers to make the dashboard interactive and allow to filter the data:
 ![CustomersData png 2](https://github.com/user-attachments/assets/00f19a88-b980-4dec-83c0-b2e5cdfe364a)
 
 
-### Key Insights the Dashboard Could Reveal:
+### Key Insights the Dashboard Revealed:
 1. *Customer Segmentation*: Identifies which subscription types have the highest customer count and revenue.
 2. *Trends in Cancellations*: Tracks the impact of cancellations over time, helping businesses focus on retention efforts.
 3. *Revenue Trends*: Shows how revenue has evolved, revealing seasonality or long-term trends.
 4. *Growth and Acquisition*: Visualizes customer growth over time, helping businesses understand their acquisition rate.
 5. *Top Customers*: Pinpoints top customers by revenue, which can help in targeted sales or retention strategies.
 
-This dashboard design provides a comprehensive view of the customer and subscription landscape, while the interactivity of slicers gives users the flexibility to analyze different segments or time periods.
+This dashboard design provides a comprehensive view of the customer and subscription landscape, while the interactivity of slicers gives the flexibility to analyze different segments or time periods.
 
 
 ### Conclusion
